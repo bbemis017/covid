@@ -1,0 +1,34 @@
+{
+    "url": "https://www.worldometers.info/coronavirus/country/us/",
+    "entities": [{
+        "label": "States",
+        "selector": "//table[@id='usa_table_countries_yesterday']",
+        "list_selector": "./tbody/tr[position() < last() - 1]",
+        "attributes": [
+            {
+                "label": "State",
+                "selector": "(./td)[1]"
+            },
+            {
+                "label": "Total Cases",
+                "selector": "(./td)[2]"
+            },
+            {
+                "label": "New Cases",
+                "selector": "(./td)[3]"
+            },
+            {
+                "label": "Total Deaths",
+                "selector": "(./td)[4]"
+            },
+            {
+                "label": "New Deaths",
+                "selector": "(./td)[5]"
+            },
+            {
+                "label": "Active Cases",
+                "selector": "(./td)[6]"
+            }
+        ]
+    }]
+}
