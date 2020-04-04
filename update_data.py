@@ -2,10 +2,9 @@ import argparse
 import requests
 import time
 import pandas as pd
+import json
 
-API_HOST='http://localhost:5000'
-API_KEY='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjc1NzUzMTkzNzc2NH0.AkEm8_iRVu7j7IKsHFTUhQEwwiEBwIumF38RkxIy8ms'
-TEMPLATE_ID='87'
+config = None
 
 def main():
     parser = argparse.ArgumentParser(description='')
@@ -14,22 +13,30 @@ def main():
 
     args = parser.parse_args()
 
+    load_config()
+
     if args.gen_template:
         print('gen template')
 
     if args.download:
         download_date = args.download
         print('download', download_date)
-        raw_data = get_data(TEMPLATE_ID)
+        raw_data = get_data(config['template_id'])
         df = clean_data(raw_data, download_date)
         save_data(df)
 
+def load_config():
+
+    global config
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+
 def get_headers():
-    return {'Authorization': 'KEY {key}'.format(key=API_KEY)}
+    return {'Authorization': 'KEY {key}'.format(key=config['api_key'])}
 
 def start_job(template_id):
     print('start job')
-    url = '{host}/job/{template}'.format(host=API_HOST,template=template_id)
+    url = '{host}/job/{template}'.format(host=config['api_host'],template=template_id)
     headers = get_headers()
 
     r = requests.post(url=url, headers=headers, data={})
@@ -39,7 +46,7 @@ def start_job(template_id):
         return None
 
 def get_status(job_id):
-    url = '{host}/job/{id}/status'.format(host=API_HOST, id=job_id)
+    url = '{host}/job/{id}/status'.format(host=config['api_host'], id=job_id)
 
     r = requests.get(url=url, headers=get_headers())
     data = r.json()
