@@ -96,6 +96,7 @@ def create_template(template_file):
 def get_data(template_id):
 
     job_id = start_job(template_id)
+    print('job started {}'.format(job_id))
 
     data = None
     while data is None:
