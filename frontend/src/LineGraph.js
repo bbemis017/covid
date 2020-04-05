@@ -27,7 +27,6 @@ class LineGraph extends React.Component {
 
 		let points = [];
 		_.forEach(date_map, (data, date) => {
-			console.log(date, data);
 			let point = {...data, 'Date': date};
 			points.push(point);
 		});
@@ -37,19 +36,27 @@ class LineGraph extends React.Component {
 
 	get_state_list() {
 		let selected = [];
-		_.forEach(this.props.selected, (is_selected, name) => {
-			if(is_selected) {
+		_.forEach(this.props.selected, (meta, name) => {
+			if(meta.selected) {
 				selected.push(name);
 			}
 		});
 		return selected;
 	}
 
+	get_state_meta(state_list) {
+		let states = [];
+		_.forEach(state_list, (name) => {
+			states.push({...this.props.selected[name], name: name});
+		});
+		return states;
+	}
+
 	render() {
-		console.log(covidData)
-		let data_type = 'New Cases';
 		let state_list = this.get_state_list();
 		let stateData = this.get_data_points(state_list, covidData);
+
+		let state_meta = this.get_state_meta(state_list);
 
 		return (
 			<div className="line-chart col-9">
@@ -58,8 +65,8 @@ class LineGraph extends React.Component {
 					<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
 					<YAxis />
 					<Tooltip />
-					{state_list.map((state) => 
-						<Line type="monotone" dataKey={state} stroke="#1dc220" strokeWidth="3"/>
+					{state_meta.map((state) => 
+						<Line type="monotone" dataKey={state.name} stroke={state.color} strokeWidth="3"/>
 					)}
 				</LineChart>
 			</div>

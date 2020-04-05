@@ -3,6 +3,15 @@ import { connect } from 'react-redux';
 
 class StatePicker extends React.Component {
 
+    get_random_color() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
 	render() {
 		return (
 			<div className="state-picker col-3 list-group">
@@ -10,8 +19,10 @@ class StatePicker extends React.Component {
                 <div className="items">
                     {Object.keys(this.props.selected_states).map((name) =>
                         <li
-                            className={`list-group-item ${this.props.selected_states[name] ? 'selected': ''}`}
-                            onClick={ () => this.props.dispatch({type: "TOGGLE_STATE", name: name})}
+                            key={name}
+                            className={`list-group-item`}
+                            onClick={ () => this.props.dispatch({type: "TOGGLE_STATE", name: name, color: this.get_random_color()})}
+                            style={this.props.selected_states[name].selected ? {backgroundColor: this.props.selected_states[name].color}: {}}
                             >
                                 {name}
                         </li>

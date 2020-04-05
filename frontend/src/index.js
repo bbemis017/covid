@@ -15,7 +15,7 @@ function get_state_map() {
   for(let i = 0; i < covidData.length; i++) {
       let state_name = covidData[i]['State'];
       if(Object.values(states).indexOf(state_name) < 0){
-          states[state_name] = false;
+          states[state_name] = {selected: false, color: '#0099ff'};
       }
   }
   return states;
@@ -26,12 +26,14 @@ const initialState = {
 };
 
 function reducer(state = initialState, action) {
-  console.log('reducer', state, action);
 
   switch(action.type) {
     case 'TOGGLE_STATE':
       let selected = _.clone(state.selected_states, true);
-      selected[action.name] = !selected[action.name];
+      selected[action.name] = {
+        selected: !selected[action.name].selected,
+        color: action.color
+      }
       return {
         ...state,
         selected_states: selected
@@ -42,7 +44,6 @@ function reducer(state = initialState, action) {
 }
 
 const store = createStore(reducer);
-store.dispatch({ type: "INCREMENT" });
 
 ReactDOM.render(
   <React.StrictMode>

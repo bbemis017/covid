@@ -7,12 +7,12 @@ import StatePicker from './StatePicker';
 function App() {
   return (
     <div className="App">
-      <body className="container">
+      <div className="container">
         <div className="row">
           <StatePicker></StatePicker>
           <LineGraph></LineGraph>
         </div>
-      </body>
+      </div>
     </div>
   );
 }
