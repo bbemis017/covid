@@ -1,37 +1,77 @@
-import { LineChart, Line, XAxis, YAxis, Tooltip, /*ResponsiveContainer*/ } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip} from 'recharts';
 import React from 'react';
+import { connect } from 'react-redux';
 import covidData from './worldometer'
+import _ from 'lodash';
 
 class LineGraph extends React.Component {
+
+	get_data_points(state_list, raw_data) { 
+		/* Each point should contain:
+		 * 	Date - x value
+		 *  state 1 - y value
+		 *  state 2 - y value
+		 **/
+		let data_type = 'New Cases';
+		let date_map = {};
+
+		_.forEach(raw_data, (record) => {
+			if( _.includes(state_list, record['State']) ){
+				if( !_.has(date_map, record['Date']) ){
+					date_map[record['Date']] = {}
+				}
+				console.log(record['Date'], record['State'], record[data_type]);
+				date_map[record['Date']][record['State']] = record[data_type];
+			}
+		});
+
+		let points = [];
+		_.forEach(date_map, (data, date) => {
+			console.log(date, data);
+			let point = {...data, 'Date': date};
+			points.push(point);
+		});
+
+		return points;
+	}
+
+	get_state_list() {
+		let selected = [];
+		_.forEach(this.props.selected, (is_selected, name) => {
+			if(is_selected) {
+				selected.push(name);
+			}
+		});
+		return selected;
+	}
+
 	render() {
 		console.log(covidData)
-		let state = 'Illinois';
-		let stateData = [];
-		for(let i = 0; i < covidData.length; i++){
-			if ( covidData[i]['State'] === state ) {
-				stateData.push(covidData[i])
-			}
-		}
-		console.log(stateData);
+		let data_type = 'New Cases';
+		let state_list = this.get_state_list();
+		let stateData = this.get_data_points(state_list, covidData);
+
 		return (
 			<div className="line-chart col-9">
-				<h1>{state}</h1>
-				{/* <ResponsiveContainer width="100%" minHeight="500px"> */}
-					<LineChart width={730} height={250} data={stateData}
-						margin={{ top: 5, right: 30, left: 50, bottom: 100 }}>
-						<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
-						<YAxis />
-						<Tooltip />
-						<Line type="monotone" dataKey="New Cases" stroke="#1dc220" />
-						<Line type="monotone" dataKey="Total Cases" stroke="#1f66e0" />
-						<Line type="monotone" dataKey="Total Deaths" stroke="#b81414" />
-					</LineChart>
-				{/* </ResponsiveContainer> */}
+				<LineChart width={730} height={250} data={stateData}
+					margin={{ top: 5, right: 30, left: 50, bottom: 100 }}>
+					<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
+					<YAxis />
+					<Tooltip />
+					{state_list.map((state) => 
+						<Line type="monotone" dataKey={state} stroke="#1dc220" strokeWidth="3"/>
+					)}
+				</LineChart>
 			</div>
 		);
 	}
 }
 
+function mapStateToProps(state) {
+    return {
+      selected: state.selected_states
+    };
+  }
 
-export default LineGraph
+export default connect(mapStateToProps)(LineGraph);
 
