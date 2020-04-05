@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.state-picker {
+
+  .items{
+    overflow-y: scroll;
+    height: 500px;
+  }
+
+  li:hover {
+    background-color: #34e1eb;
+  }
+  .selected {
+    background-color: #0099ff;
+  }
+}

@@ -1,13 +1,17 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 
 import LineGraph from './LineGraph';
+import StatePicker from './StatePicker';
 
 function App() {
   return (
     <div className="App">
-      <body>
-        <LineGraph></LineGraph>
+      <body className="container">
+        <div className="row">
+          <StatePicker></StatePicker>
+          <LineGraph></LineGraph>
+        </div>
       </body>
     </div>
   );

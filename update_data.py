@@ -11,6 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--gen_template')
     parser.add_argument('--download')
+    parser.add_argument('--rerun', action='store_true')
     parser.add_argument('--get_json', action='store_true')
 
     args = parser.parse_args()
@@ -31,7 +32,7 @@ def main():
         print('download', download_date)
         raw_data = get_data(config['template_id'])
         df = clean_data(raw_data, download_date)
-        save_data(df)
+        save_data(df, args.rerun)
 
     if args.get_json:
         update_json_file()
@@ -142,10 +143,12 @@ def update_json_file():
     df.to_json('frontend/src/worldometer.json', orient='records')
 
 
-def save_data(df):
+def save_data(df, overwrite_data):
     old_df = read_csv()
 
     new_df = pd.concat([old_df, df])
+
+    filename = 'data/worldometer.csv'
     new_df.to_csv(filename, index=False)
 
 

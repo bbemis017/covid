@@ -1,5 +1,6 @@
 {
-    "template_id": 87,
+    "template_id": 1,
     "api_host": "http://localhost:5000",
-    "api_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjc1NzUzMTkzNzc2NH0.AkEm8_iRVu7j7IKsHFTUhQEwwiEBwIumF38RkxIy8ms"
+    "api_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjc0MjE0MTYyMDkxMn0.f2HBYiT7jcRJHctNKsBixq6KFH6mtqMDJRVgNF3-DYk",
+    "csv_filename": "data/worldometer.csv"
 }
