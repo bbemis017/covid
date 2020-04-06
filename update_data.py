@@ -128,6 +128,7 @@ def clean_data(data_dict, date):
     df['New Deaths'] = remove_extras(df, 'New Deaths')
     df['Total Cases'] = remove_extras(df, 'Total Cases')
     df['Total Deaths'] = remove_extras(df, 'Total Deaths')
+    df['Total Tests'] = remove_extras(df, 'Total Tests')
 
     df.insert(0, 'Date', date)
     return df

@@ -1,5 +1,5 @@
 {
-    "template_id": 1,
+    "template_id": 11,
     "api_host": "http://localhost:5000",
     "api_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjc0MjE0MTYyMDkxMn0.f2HBYiT7jcRJHctNKsBixq6KFH6mtqMDJRVgNF3-DYk",
     "csv_filename": "data/worldometer.csv"

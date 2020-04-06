@@ -6,13 +6,12 @@ import _ from 'lodash';
 
 class LineGraph extends React.Component {
 
-	get_data_points(state_list, raw_data) { 
+	get_data_points(data_type, state_list, raw_data) { 
 		/* Each point should contain:
 		 * 	Date - x value
 		 *  state 1 - y value
 		 *  state 2 - y value
 		 **/
-		let data_type = 'New Cases';
 		let date_map = {};
 
 		_.forEach(raw_data, (record) => {
@@ -53,13 +52,15 @@ class LineGraph extends React.Component {
 	}
 
 	render() {
+		let data_type = 'New Cases';
 		let state_list = this.get_state_list();
-		let stateData = this.get_data_points(state_list, covidData);
+		let stateData = this.get_data_points(data_type, state_list, covidData);
 
 		let state_meta = this.get_state_meta(state_list);
 
 		return (
 			<div className="line-chart col-9">
+				<h1>{data_type}</h1>
 				<LineChart width={730} height={600} data={stateData}
 					margin={{ top: 5, right: 30, left: 50, bottom: 100 }}>
 					<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
