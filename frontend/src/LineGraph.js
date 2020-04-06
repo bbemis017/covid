@@ -60,13 +60,16 @@ class LineGraph extends React.Component {
 
 		return (
 			<div className="line-chart col-9">
-				<LineChart width={730} height={250} data={stateData}
+				<LineChart width={730} height={600} data={stateData}
 					margin={{ top: 5, right: 30, left: 50, bottom: 100 }}>
 					<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
 					<YAxis />
 					<Tooltip />
 					{state_meta.map((state) => 
-						<Line type="monotone" dataKey={state.name} stroke={state.color} strokeWidth="3"/>
+						<Line
+							key={state.name}
+							type="monotone" dataKey={state.name} stroke={state.color} strokeWidth="3"
+						/>
 					)}
 				</LineChart>
 			</div>

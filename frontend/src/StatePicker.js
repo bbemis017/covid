@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 class StatePicker extends React.Component {
 
@@ -12,12 +13,25 @@ class StatePicker extends React.Component {
         return color;
       }
 
+    on_text_change(event) {
+      this.props.dispatch({type: "FILTER_INPUT", input: event.target.value})
+    }
+
 	render() {
+    let state_names = [];
+    _.forEach(this.props.selected_states, (meta, name) => {
+      state_names.push(name);
+    });
+    state_names = _.filter(state_names, (name) => {
+      name = name.toLowerCase();
+      return name === '' || _.includes(name, this.props.filter_input)
+    });
 		return (
 			<div className="state-picker col-3 list-group">
                 <h1>States</h1>
+                <input placeholder="Search" onChange={(e) => this.on_text_change(e)} />
                 <div className="items">
-                    {Object.keys(this.props.selected_states).map((name) =>
+                    {state_names.map((name) =>
                         <li
                             key={name}
                             className={`list-group-item`}
@@ -35,7 +49,8 @@ class StatePicker extends React.Component {
 
 function mapStateToProps(state) {
     return {
-      selected_states: state.selected_states
+      selected_states: state.selected_states,
+      filter_input: state.state_picker.filter_input
     };
   }
 

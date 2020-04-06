@@ -22,7 +22,10 @@ function get_state_map() {
 }
 
 const initialState = {
-    selected_states: get_state_map()
+    selected_states: get_state_map(),
+    state_picker: {
+      filter_input: ''
+    }
 };
 
 function reducer(state = initialState, action) {
@@ -37,6 +40,13 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         selected_states: selected
+      }
+    case 'FILTER_INPUT':
+      return {
+        ...state,
+        state_picker: {
+          filter_input: action.input
+        }
       }
     default:
       return state;
