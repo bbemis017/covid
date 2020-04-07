@@ -3,6 +3,7 @@ import './App.scss';
 
 import LineGraph from './LineGraph';
 import StatePicker from './StatePicker';
+import TypePicker from './typePicker';
 
 function App() {
   return (
@@ -10,7 +11,10 @@ function App() {
       <div className="container">
         <div className="row">
           <StatePicker></StatePicker>
-          <LineGraph></LineGraph>
+          <div>
+            <TypePicker></TypePicker>
+            <LineGraph></LineGraph>
+          </div>
         </div>
       </div>
     </div>

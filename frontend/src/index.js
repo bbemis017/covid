@@ -25,6 +25,9 @@ const initialState = {
     selected_states: get_state_map(),
     state_picker: {
       filter_input: ''
+    },
+    data_type_picker: {
+      type: 'New Cases'
     }
 };
 
@@ -46,6 +49,13 @@ function reducer(state = initialState, action) {
         ...state,
         state_picker: {
           filter_input: action.input
+        }
+      }
+    case 'SELECT_DATA_COLUMN':
+      return {
+        ...state,
+        data_type_picker: {
+          type: action.column
         }
       }
     default:

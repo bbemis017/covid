@@ -52,7 +52,7 @@ class LineGraph extends React.Component {
 	}
 
 	render() {
-		let data_type = 'New Cases';
+		let data_type = this.props.data_column;
 		let state_list = this.get_state_list();
 		let stateData = this.get_data_points(data_type, state_list, covidData);
 
@@ -60,7 +60,6 @@ class LineGraph extends React.Component {
 
 		return (
 			<div className="line-chart col-9">
-				<h1>{data_type}</h1>
 				<LineChart width={730} height={600} data={stateData}
 					margin={{ top: 5, right: 30, left: 50, bottom: 100 }}>
 					<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
@@ -80,7 +79,8 @@ class LineGraph extends React.Component {
 
 function mapStateToProps(state) {
     return {
-      selected: state.selected_states
+	  selected: state.selected_states,
+	  data_column: state.data_type_picker.type
     };
   }
 
