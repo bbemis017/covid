@@ -22,6 +22,9 @@ function get_state_map() {
 }
 
 const initialState = {
+    covid_data: {
+      raw: []
+    },
     selected_states: get_state_map(),
     state_picker: {
       filter_input: ''
@@ -56,6 +59,13 @@ function reducer(state = initialState, action) {
         ...state,
         data_type_picker: {
           type: action.column
+        }
+      }
+    case 'RECEIVE_COVID_DATA':
+      return {
+        ...state,
+        covid_data: {
+          raw: action.data
         }
       }
     default:

@@ -1,7 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip} from 'recharts';
 import React from 'react';
 import { connect } from 'react-redux';
-import covidData from './worldometer'
 import _ from 'lodash';
 
 class LineGraph extends React.Component {
@@ -54,7 +53,7 @@ class LineGraph extends React.Component {
 	render() {
 		let data_type = this.props.data_column;
 		let state_list = this.get_state_list();
-		let stateData = this.get_data_points(data_type, state_list, covidData);
+		let stateData = this.get_data_points(data_type, state_list, this.props.covid_data);
 
 		let state_meta = this.get_state_meta(state_list);
 
@@ -80,7 +79,8 @@ class LineGraph extends React.Component {
 function mapStateToProps(state) {
     return {
 	  selected: state.selected_states,
-	  data_column: state.data_type_picker.type
+	  data_column: state.data_type_picker.type,
+	  covid_data: state.covid_data.raw
     };
   }
 
