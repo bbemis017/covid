@@ -14,7 +14,8 @@ class TypePicker extends React.Component {
 			<div className="type-picker">
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
                     {available_types.map((type) => 
-                        <button 
+                        <button
+                            key={type}
                             type="Button"
                             className={`btn btn-outline-primary ${type === this.props.type ? 'active': ''}`}
                             onClick={() => this.selectType(type)}

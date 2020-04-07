@@ -21,9 +21,9 @@ class App extends React.Component {
           <div className="container">
             <div className="row">
               <StatePicker></StatePicker>
-              <div>
-                <TypePicker></TypePicker>
-                <LineGraph></LineGraph>
+              <div className="col-9">
+                  <TypePicker></TypePicker>
+                  <LineGraph></LineGraph>
               </div>
             </div>
           </div>

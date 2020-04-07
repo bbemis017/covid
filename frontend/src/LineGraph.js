@@ -18,7 +18,6 @@ class LineGraph extends React.Component {
 				if( !_.has(date_map, record['Date']) ){
 					date_map[record['Date']] = {}
 				}
-				console.log(record['Date'], record['State'], record[data_type]);
 				date_map[record['Date']][record['State']] = record[data_type];
 			}
 		});
@@ -58,7 +57,7 @@ class LineGraph extends React.Component {
 		let state_meta = this.get_state_meta(state_list);
 
 		return (
-			<div className="line-chart col-9">
+			<div className="line-chart">
 				<LineChart width={730} height={600} data={stateData}
 					margin={{ top: 5, right: 30, left: 50, bottom: 100 }}>
 					<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
