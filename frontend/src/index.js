@@ -25,7 +25,7 @@ function get_state_map() {
 function get_column_list() {
   let columns = [];
   _.map(covidData[0], (value, column) => {
-    if( column !== 'State' && column != 'Date') {
+    if( column !== 'State' && column !== 'Date') {
       columns.push(column);
     }
   });
