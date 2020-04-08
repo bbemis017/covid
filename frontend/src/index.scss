@@ -15,8 +15,8 @@ code {
 .state-picker {
 
   .items{
-    // overflow-y: scroll;
-    // height: 500px;
+    overflow-y: scroll;
+    height: 500px;
 
   }
 
@@ -27,14 +27,15 @@ code {
     }
   }
 
-  @media only screen and (max-width: 768px) {
-    /* For mobile Screens width < 768*/
+  @media only screen and (max-width: 768px) and (orientation: portrait) {
+    /* For mobile Screens width < 768 and portrait*/
     .items {
       overflow-x: scroll;
       overflow-y: hidden;
       white-space: nowrap;
       padding: 15px 0;
       margin: 0 5px;
+      height: auto;
 
       li {
         display: inline;
@@ -42,6 +43,13 @@ code {
         border-radius: 5px;
         margin: 0 5px;
       }
+    }
+  }
+
+  @media only screen  and (max-width: 768px) and (orientation: landscape) {
+    /* mobile screens in landscape*/
+    .items {
+      height: 260px;
     }
   }
   
