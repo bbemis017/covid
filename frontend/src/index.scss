@@ -15,11 +15,34 @@ code {
 .state-picker {
 
   .items{
-    overflow-y: scroll;
-    height: 500px;
+    // overflow-y: scroll;
+    // height: 500px;
+
   }
 
-  li:hover {
-    background-color: #34e1eb;
+  @media(hover: hover) {
+    /* Only for screens with hover enabled*/
+    li:hover, li:active {
+      background-color: #34e1eb;
+    }
   }
+
+  @media only screen and (max-width: 768px) {
+    /* For mobile Screens width < 768*/
+    .items {
+      overflow-x: scroll;
+      overflow-y: hidden;
+      white-space: nowrap;
+      padding: 15px 0;
+      margin: 0 5px;
+
+      li {
+        display: inline;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin: 0 5px;
+      }
+    }
+  }
+  
 }

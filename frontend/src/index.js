@@ -18,6 +18,7 @@ function get_state_map() {
           states[state_name] = {selected: false, color: '#0099ff'};
       }
   }
+  states['Indiana'].selected = true;
   return states;
 }
 

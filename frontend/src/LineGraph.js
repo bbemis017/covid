@@ -1,4 +1,4 @@
-import { LineChart, Line, XAxis, YAxis, Tooltip} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -58,18 +58,20 @@ class LineGraph extends React.Component {
 
 		return (
 			<div className="line-chart">
-				<LineChart width={730} height={600} data={stateData}
-					margin={{ top: 5, right: 30, left: 50, bottom: 100 }}>
-					<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
-					<YAxis />
-					<Tooltip />
-					{state_meta.map((state) => 
-						<Line
-							key={state.name}
-							type="monotone" dataKey={state.name} stroke={state.color} strokeWidth="3"
-						/>
-					)}
-				</LineChart>
+				<ResponsiveContainer width="100%" minWidth="300px" minHeight="500px">
+					<LineChart data={stateData}
+						margin={{ top: 5, right: 5, left: 0, bottom: 100 }}>
+						<XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
+						<YAxis />
+						<Tooltip />
+						{state_meta.map((state) => 
+							<Line
+								key={state.name}
+								type="monotone" dataKey={state.name} stroke={state.color} strokeWidth="3"
+							/>
+						)}
+					</LineChart>
+				</ResponsiveContainer>
 			</div>
 		);
 	}

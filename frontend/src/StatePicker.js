@@ -17,6 +17,10 @@ class StatePicker extends React.Component {
       this.props.dispatch({type: "FILTER_INPUT", input: event.target.value})
     }
 
+    select(name){
+      this.props.dispatch({type: "TOGGLE_STATE", name: name, color: this.get_random_color()})
+    }
+
 	render() {
     let state_names = [];
     _.forEach(this.props.selected_states, (meta, name) => {
@@ -24,24 +28,25 @@ class StatePicker extends React.Component {
     });
     state_names = _.filter(state_names, (name) => {
       name = name.toLowerCase();
-      return name === '' || _.includes(name, this.props.filter_input)
+      return name === '' || _.includes(name, this.props.filter_input.toLowerCase());
     });
 		return (
-			<div className="state-picker col-3 list-group">
-                <h1>States</h1>
-                <input placeholder="Search" onChange={(e) => this.on_text_change(e)} />
-                <div className="items">
-                    {state_names.map((name) =>
-                        <li
-                            key={name}
-                            className={`list-group-item`}
-                            onClick={ () => this.props.dispatch({type: "TOGGLE_STATE", name: name, color: this.get_random_color()})}
-                            style={this.props.selected_states[name].selected ? {backgroundColor: this.props.selected_states[name].color}: {}}
-                            >
-                                {name}
-                        </li>
-                    )}
-                </div>
+			<div className="state-picker col-sm-3 list-group">
+          <h1>States</h1>
+          <input placeholder="Search" onChange={(e) => this.on_text_change(e)} />
+          <div className="items">
+              {state_names.map((name) =>
+                  <li
+                      key={name}
+                      className={`list-group-item`}
+                      onClick={ () => this.select(name)}
+                      onDoubleClick={() => this.select(name)}
+                      style={this.props.selected_states[name].selected ? {backgroundColor: this.props.selected_states[name].color}: {}}
+                      >
+                          {name}
+                  </li>
+              )}
+          </div>
 			</div>
 		);
 	}
