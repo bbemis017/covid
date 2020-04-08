@@ -9,11 +9,10 @@ class TypePicker extends React.Component {
     }
 
 	render() {
-        let available_types = ['New Cases', 'Total Cases', 'Total Deaths'];
 		return (
 			<div className="type-picker">
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                    {available_types.map((type) => 
+                    {this.props.columns.map((type) => 
                         <button
                             key={type}
                             type="Button"
@@ -32,7 +31,8 @@ class TypePicker extends React.Component {
 
 function mapStateToProps(state) {
     return {
-      type: state.data_type_picker.type
+      type: state.data_type_picker.type,
+      columns: state.data_type_picker.columns
     };
   }
 

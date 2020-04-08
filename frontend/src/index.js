@@ -22,6 +22,16 @@ function get_state_map() {
   return states;
 }
 
+function get_column_list() {
+  let columns = [];
+  _.map(covidData[0], (value, column) => {
+    if( column !== 'State' && column != 'Date') {
+      columns.push(column);
+    }
+  });
+  return columns;
+}
+
 const initialState = {
     covid_data: {
       raw: []
@@ -31,7 +41,8 @@ const initialState = {
       filter_input: ''
     },
     data_type_picker: {
-      type: 'New Cases'
+      type: 'New Cases',
+      columns: get_column_list()
     }
 };
 
@@ -59,6 +70,7 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         data_type_picker: {
+          ...state.data_type_picker,
           type: action.column
         }
       }
