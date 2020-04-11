@@ -17,10 +17,11 @@ def main():
     parser.add_argument('--download')
     parser.add_argument('--rerun', action='store_true')
     parser.add_argument('--get_json', action='store_true')
+    parser.add_argument('--config')
 
     args = parser.parse_args()
 
-    load_config()
+    load_config(args.config)
 
     fetch_date = get_yesterdays_date()
 
@@ -59,10 +60,12 @@ def fetch_data(download_date, rerun):
     save_data(df, rerun)
 
 
-def load_config():
+def load_config(config_filename):
 
+    if not config_filename:
+        config_filename = 'config.json'
     global config
-    config = load_dict_from_json('config.json')
+    config = load_dict_from_json(config_filename)
 
 
 def load_dict_from_json(filename):
