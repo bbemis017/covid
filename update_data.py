@@ -21,6 +21,7 @@ def main():
 
     args = parser.parse_args()
 
+    print('Starting', datetime.today())
     load_config(args.config)
 
     fetch_date = get_yesterdays_date()
