@@ -1,8 +1,12 @@
+#!local_env/bin/python3.6
+
 import argparse
 import requests
 import time
 import pandas as pd
 import json
+from datetime import datetime, timedelta
+import sys
 
 config = None
 
@@ -18,24 +22,41 @@ def main():
 
     load_config()
 
+    fetch_date = get_yesterdays_date()
+
     if args.gen_template:
-        template_file = args.gen_template
-        print('gen template')
-        template_id = create_template(template_file)
-        print('created template', template_id)
-        if template_id is not None:
-            config['template_id'] = template_id
-            write_dict_to_json(config, 'config.json')
+        generate_template()
 
     if args.download:
-        download_date = args.download
-        print('download', download_date)
-        raw_data = get_data(config['template_id'])
-        df = clean_data(raw_data, download_date)
-        save_data(df, args.rerun)
+        fetch_date = args.download
+    fetch_data(fetch_date, args.rerun)
 
     if args.get_json:
         update_json_file()
+
+
+def get_yesterdays_date():
+    current_date = datetime.today()
+
+    update_date = current_date - timedelta(days=1)
+    return update_date.strftime("%Y%m%d")
+
+
+def generate_template():
+    template_file = args.gen_template
+    print('gen template')
+    template_id = create_template(template_file)
+    print('created template', template_id)
+    if template_id is not None:
+        config['template_id'] = template_id
+        write_dict_to_json(config, 'config.json')
+
+
+def fetch_data(download_date, rerun):
+    print('download', download_date)
+    raw_data = get_data(config['template_id'])
+    df = clean_data(raw_data, download_date)
+    save_data(df, rerun)
 
 
 def load_config():
