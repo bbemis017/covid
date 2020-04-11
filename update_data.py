@@ -88,6 +88,7 @@ def start_job(template_id):
     if 'id' in r.json():
         return r.json()['id']
     else:
+        sys.exit('Error', r.json())
         return None
 
 
