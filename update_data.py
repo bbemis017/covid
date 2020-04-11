@@ -88,6 +88,7 @@ def start_job(template_id):
     headers = get_headers()
 
     r = requests.post(url=url, headers=headers, data={})
+    print(r)
     if 'id' in r.json():
         return r.json()['id']
     else:
@@ -160,13 +161,12 @@ def clean_data(data_dict, date):
 
 
 def read_csv():
-    filename = 'data/worldometer.csv'
-    return pd.read_csv(filename)
+    return pd.read_csv(config['csv_filename'])
 
 
 def update_json_file():
     df = read_csv()
-    df.to_json('frontend/src/worldometer.json', orient='records')
+    df.to_json(config['json_filename'], orient='records')
 
 
 def save_data(df, overwrite_data):
@@ -174,8 +174,7 @@ def save_data(df, overwrite_data):
 
     new_df = pd.concat([old_df, df])
 
-    filename = 'data/worldometer.csv'
-    new_df.to_csv(filename, index=False)
+    new_df.to_csv(config['csv_filename'], index=False)
 
 
 if __name__ == "__main__":
