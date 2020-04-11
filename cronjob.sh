@@ -10,3 +10,6 @@ cd "${SCRIPTPATH}"
 git checkout aws-ec2
 git add data/worldometer.csv
 git commit -m "Data Update"
+
+cd frontend
+yarn build
