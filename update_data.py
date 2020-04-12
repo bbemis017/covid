@@ -17,10 +17,12 @@ def main():
     parser.add_argument('--download')
     parser.add_argument('--rerun', action='store_true')
     parser.add_argument('--get_json', action='store_true')
+    parser.add_argument('--config')
 
     args = parser.parse_args()
 
-    load_config()
+    print('Starting', datetime.today())
+    load_config(args.config)
 
     fetch_date = get_yesterdays_date()
 
@@ -59,10 +61,12 @@ def fetch_data(download_date, rerun):
     save_data(df, rerun)
 
 
-def load_config():
+def load_config(config_filename):
 
+    if not config_filename:
+        config_filename = 'config.json'
     global config
-    config = load_dict_from_json('config.json')
+    config = load_dict_from_json(config_filename)
 
 
 def load_dict_from_json(filename):
@@ -85,9 +89,11 @@ def start_job(template_id):
     headers = get_headers()
 
     r = requests.post(url=url, headers=headers, data={})
+    print(r)
     if 'id' in r.json():
         return r.json()['id']
     else:
+        sys.exit('Error', r.json())
         return None
 
 
@@ -156,13 +162,12 @@ def clean_data(data_dict, date):
 
 
 def read_csv():
-    filename = 'data/worldometer.csv'
-    return pd.read_csv(filename)
+    return pd.read_csv(config['csv_filename'])
 
 
 def update_json_file():
     df = read_csv()
-    df.to_json('frontend/src/worldometer.json', orient='records')
+    df.to_json(config['json_filename'], orient='records')
 
 
 def save_data(df, overwrite_data):
@@ -170,8 +175,7 @@ def save_data(df, overwrite_data):
 
     new_df = pd.concat([old_df, df])
 
-    filename = 'data/worldometer.csv'
-    new_df.to_csv(filename, index=False)
+    new_df.to_csv(config['csv_filename'], index=False)
 
 
 if __name__ == "__main__":
