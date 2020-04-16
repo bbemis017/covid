@@ -32,6 +32,11 @@ SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 cd "${SCRIPTPATH}"
 export_env .env
 
+# Update Code
+git reset --hard
+git checkout aws-ec2
+git pull origin aws-ec2
+
 # get python virtual environment
 source "local_env/bin/activate"
 
