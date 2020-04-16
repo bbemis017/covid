@@ -15,16 +15,22 @@ on_error() {
         --message "Subject={Data='EC2 CronJob Error',Charset=utf8},Body={Text={Data='Job Error',Charset=utf8},Html={Data='${message}',Charset=utf8}}"
 }
 
+export_env() {
+    temp_file="export_env.temp"
+    cat "${1}" | grep -v "^$" | grep -v "^#" > ${temp_file}
+    while IFS= read -r line; do
+        export "${line}"
+    done < ${temp_file}
+    rm ${temp_file}
+}
+
 printf "Starting\n"
 
-# get user's environment setup
-# source "${HOME}/.bashrc"
-
-printf "source bashrc\n"
 
 # cd into script directory
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 cd "${SCRIPTPATH}"
+export_env .env
 
 # get python virtual environment
 source "local_env/bin/activate"
