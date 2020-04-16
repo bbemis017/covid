@@ -47,6 +47,7 @@ python update.py
 git checkout aws-ec2
 git add ../data/worldometer.csv
 git commit -m "Data Update"
+git push origin aws-ec2
 
 # rebuild frontend application
 cd ../frontend
