@@ -10,8 +10,18 @@ from store import DataStore
 def main():
     parser = argparse.ArgumentParser(description='Fetch Data with template id and generate csv, json files for webapp')
     parser.add_argument('--rerun', help='Refetch data using current template and store it with the provided date, format: YYYYMMDD')
+    parser.add_argument('--get_json', action='store_true', help='Regenerate json file from csv')
 
     args = parser.parse_args()
+
+    if args.get_json:
+        data_store = DataStore(
+            get_env_var('CSV_PATH'),
+            get_env_var('JSON_PATH')
+        )
+
+        data_store.save_to_json()
+        sys.exit()
 
     # set the fetch date as yesterday by default
     current_date = datetime.today()

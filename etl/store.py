@@ -7,6 +7,7 @@ class DataStore:
         self.json_filename = json_filename
 
         self.df = pd.read_csv(csv_filename)
+        self.df['Date'] = pd.to_datetime(self.df['Date'], format=DataStore.DATE_FORMAT)
 
 
     def get_latest_date(self):
