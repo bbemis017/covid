@@ -78,6 +78,7 @@ class LineGraph extends React.Component {
 }
 
 function mapStateToProps(state) {
+	state = state.all_reducers;
     return {
 	  selected: state.selected_states,
 	  data_column: state.data_type_picker.type,

@@ -36,7 +36,7 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    raw_data: state.covid_data.raw
+    raw_data: state.all_reducers.covid_data.raw
   };
 }
 
