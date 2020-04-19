@@ -612,7 +612,7 @@ Date,Active Cases,New Cases,New Deaths,State,Total Cases,Total Deaths,Total Test
 20200322,,2,1,Colorado,476,6,
 20200322,74.0,2,0,Kentucky,79,3,
 20200322,,2,0,Puerto Rico,23,0,275.0
-20200322,,0,0,Illinois,753,6,
+20200322,,296,3,Illinois,1049,9,
 20200322,,12,1,Guam,27,1,153.0
 20200322,,0,0,Idaho,42,0,
 20200322,,24,0,Oregon,161,4,3025.0
@@ -625,7 +625,7 @@ Date,Active Cases,New Cases,New Deaths,State,Total Cases,Total Deaths,Total Test
 20200323,,55,2,Nevada,245,4,3735.0
 20200323,,26,3,Vermont,75,5,1181.0
 20200323,,91,0,Ohio,442,0,
-20200323,,468,6,Illinois,1221,12,
+20200323,,172,3,Illinois,1221,12,
 20200323,,42,0,North Carolina,297,0,
 20200323,,5,0,Wyoming,29,0,
 20200323,,39,0,Alabama,196,0,
