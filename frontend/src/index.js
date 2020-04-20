@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
+import overview from './pages/overview'
 import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import root_reducer from './reducers/index';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -14,7 +16,12 @@ const store = createStore(root_reducer);
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <Router>
+        <Switch>
+          <Route path="/test" component={overview} />
+          <Route path="/" component={App} />
+        </Switch>
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
