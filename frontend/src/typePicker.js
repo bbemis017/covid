@@ -30,6 +30,7 @@ class TypePicker extends React.Component {
 }
 
 function mapStateToProps(state) {
+    state = state.all_reducers;
     return {
       type: state.data_type_picker.type,
       columns: state.data_type_picker.columns

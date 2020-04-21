@@ -53,6 +53,7 @@ class StatePicker extends React.Component {
 }
 
 function mapStateToProps(state) {
+    state = state.all_reducers;
     return {
       selected_states: state.selected_states,
       filter_input: state.state_picker.filter_input

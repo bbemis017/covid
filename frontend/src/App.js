@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './App.scss';
 import covidData from './worldometer';
 
 import LineGraph from './LineGraph';
@@ -36,7 +35,7 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    raw_data: state.covid_data.raw
+    raw_data: state.all_reducers.covid_data.raw
   };
 }
 
