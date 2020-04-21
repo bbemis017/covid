@@ -13,6 +13,12 @@ class Overview extends React.Component {
             <div className="col-lg-3">
               <StateCard state_name={'USA Total'}></StateCard>
             </div>
+            <div className="col-lg-3">
+              <StateCard state_name={'Indiana'}></StateCard>
+            </div>
+            <div className="col-lg-3">
+              <StateCard state_name={'Illinois'}></StateCard>
+            </div>
           </div>
       </div>
     );

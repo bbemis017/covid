@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import overview from './pages/overview'
+// import ChartPage from './pages/chart';
 import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -31,6 +32,7 @@ class Root extends React.Component {
               <Router>
                 <Switch>
                   <Route path="/chart" component={App} />
+                  {/* <Route path="/chart" component={ChartPage} /> */}
                   <Route path="/" component={overview} />
                 </Switch>
               </Router>
