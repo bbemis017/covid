@@ -30,8 +30,8 @@ class Root extends React.Component {
             <Provider store={this.store}>
               <Router>
                 <Switch>
-                  <Route path="/test" component={overview} />
-                  <Route path="/" component={App} />
+                  <Route path="/chart" component={App} />
+                  <Route path="/" component={overview} />
                 </Switch>
               </Router>
             </Provider>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 import  _ from 'lodash';
 import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
@@ -46,12 +45,21 @@ class FieldTick extends React.Component {
     }
   }
 
+  format_number (num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+  }
+
   render() {
     if (_.isEqual(this.props.records, undefined) || this.props.records.length < 1) return ( <div>Loading</div>);
 
+    let positive_dir = this.props.positive_direction;
+    if (_.isEqual(this.props.positive_direction, undefined)) {
+      positive_dir = 1;
+    }
+
     let meta = this.get_state_direction_meta(this.props.records,this.props.field);
     let last_record = this.props.records[this.props.records.length - 1];
-    let color = _.isEqual(meta.direction, 1)? 'red': 'green';
+    let color = _.isEqual(meta.direction, positive_dir)? 'red': 'green';
     return (
         <div className="field-tick">
             <div className="float-right">
@@ -59,11 +67,11 @@ class FieldTick extends React.Component {
                     icon={_.isEqual(meta.direction, 1)? faArrowUp: faArrowDown}
                     color={color}
                 />
-                <span style={{color: color}}>{meta.days} days</span>
+                <span style={{color: color}}>{meta.days} day{meta.days > 1? 's': ''}</span>
             </div>
             <div>
                 <span>{this.props.field}: </span>
-                <span>{last_record[this.props.field]}</span>
+                <span>{this.format_number(last_record[this.props.field])}</span>
             </div>
         </div>
     );
@@ -72,7 +80,8 @@ class FieldTick extends React.Component {
 
 FieldTick.propTypes = {
     field: PropTypes.string.isRequired,
-    records: PropTypes.array.isRequired
+    records: PropTypes.array.isRequired,
+    positive_direction: PropTypes.number
 };
 
 export default FieldTick;
