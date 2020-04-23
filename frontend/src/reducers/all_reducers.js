@@ -13,6 +13,21 @@ function get_state_map() {
   return states;
 }
 
+function get_state_list(covid_records) {
+  /**
+   * Gets a unique sorted array of all the states in the raw covid data
+   */
+  let state_map = {};
+  _.forEach(covid_records, (record) => {
+    let state = record['State'];
+    if(!_.has(state_map, state)){
+      state_map[state] = true;
+    }
+  });
+  let states = _.keys(state_map);
+  return _.sortBy(states, (state)=> {return state.toLowerCase();});
+}
+
 function get_column_list() {
   let columns = [];
   _.map(covidData[0], (value, column) => {
@@ -25,7 +40,9 @@ function get_column_list() {
 
 const INITIAL_STATE ={
     covid_data: {
-      raw: []
+      raw: [],
+      field_list: get_column_list(),
+      states: []
     },
     selected_states: get_state_map(),
     state_picker: {
@@ -70,7 +87,8 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         covid_data: {
-          raw: action.data
+          raw: action.data,
+          states: get_state_list(action.data)
         }
       }
     default:

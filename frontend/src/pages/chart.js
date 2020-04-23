@@ -8,29 +8,37 @@ import {
     XAxis,
     YAxis,
     Tooltip,
-    ResponsiveContainer
+    ResponsiveContainer,
+    Legend
 } from 'recharts';
+import {faFilter, faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon, } from "@fortawesome/react-fontawesome";
+import { Link } from 'react-router-dom';
 
 
 class ChartPage extends React.Component {
 
   //hex colors https://htmlcolorcodes.com/
-
-// TODO
-//   get_state_meta(query_params){
-//     let list = _.get(query_params, 'state', ['Indiana,#0099ff']);
-//     let meta_list = [];
-//     _.forEach(list, (item) => {
-//         meta_list.append()
-//     });
-//   }
-
-  get_state_list(query_params){
-    let list = _.get(query_params, 'state', ['Indiana']);
-    if( !Array.isArray(list) ){
-        list = [list];
+  get_state_meta(query_params){
+    let states = _.get(query_params, 'state', 'USA Total@0099ff');
+    if (!Array.isArray(states)){
+        states = [states];
     }
-    return list;
+
+    let meta_list = [];
+    _.forEach(states, (item) => {
+        let values = _.split(item, '@');
+        meta_list.push({'state': values[0], 'color': '#' + values[1]});
+    });
+    return meta_list;
+  }
+
+  get_state_list(state_meta){
+    let states = [];
+    _.forEach(state_meta, (meta) =>{
+        states.push(meta.state);
+    });
+    return states;
   }
 
   get_data_points(data_type, state_list, raw_data) { 
@@ -62,28 +70,44 @@ class ChartPage extends React.Component {
   render() {
       let query_params = queryString.parse(this.props.location.search);
       let field = _.get(query_params, 'field', 'New Cases')
-      let state_list = this.get_state_list(query_params);
-
+      let state_meta = this.get_state_meta(query_params);
+      let state_list = this.get_state_list(state_meta);
 
       let data_points = this.get_data_points(field, state_list, this.props.raw_data);
       return (
         <div className="chart-page">
-            <h1>Chart</h1>
-            <ResponsiveContainer width="100%" minWidth="300px" minHeight="500px">
+            <Link to={"/config/" + this.props.location.search}>
+                <FontAwesomeIcon
+                    icon={faFilter}
+                    size="lg"
+                    className="float-right"
+                    color={'#464a47'}
+                />
+            </Link>
+            <Link to="/">
+                <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    size="lg"
+                    color={'#464a47'}
+                />
+            </Link>
+            <h3>{field}</h3>
+            <ResponsiveContainer width="100%" height="100%" minWidth="300px" minHeight="300px">
                 <LineChart data={data_points}
                     margin={{ top: 5, right: 5, left: 0, bottom: 100 }}>
                     <XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
                     <YAxis />
                     <Tooltip />
-                    {state_list.map((state) => 
+                    {state_meta.map((meta) => 
                         <Line
-                            key={state}
+                            key={meta.state}
                             type="monotone"
-                            dataKey={state}
-                            // stroke={'red'}
+                            dataKey={meta.state}
+                            stroke={meta.color}
                             strokeWidth="3"
                         />
                     )}
+                    <Legend verticalAlign="top" height={36}/>
                 </LineChart>
             </ResponsiveContainer>
         </div>
