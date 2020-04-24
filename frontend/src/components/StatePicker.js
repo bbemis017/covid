@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
+
 class StatePicker extends React.Component {
 
     get_random_rgb_color(){
@@ -69,28 +70,50 @@ class StatePicker extends React.Component {
 
         // filter the states based on the filter_input
         let states = _.filter(this.props.all_states, (name) => {
-            name = name.toLowerCase();
-            return _.isEqual(name, '') || _.includes(name, this.props.filter_input.toLowerCase());
-          });
-
+            return _.includes(name.toLowerCase(), this.props.filter_input.toLowerCase())
+                && this.props.filter_input.length > 0 // don't display anything if search is empty
+                && !_.has(this.props.selected, name); // don't display selected states
+        });
         return (
-            <div className="state-picker col-sm-3 list-group">
-            <h1>States</h1>
-            <input placeholder="Search" onChange={(e) => this.on_filter_change(e)} />
-            <div className="items">
-                {states.map((name) =>
-                    <li
-                        key={name}
-                        className={`list-group-item`}
-                        onClick={ () => this.toggle_state(name)}
-                        style={_.get(this.props.selected, name, false) ?
-                                {backgroundColor: this.props.selected[name]}
-                                : {}}
-                        >
-                            {name}
-                    </li>
-                )}
-            </div>
+            <div className="state-picker container list-group">
+                <h4>Selected States:</h4>
+                <div className="row">
+                    {Object.keys(this.props.selected).map((name)=>
+                        <li
+                            key={name}
+                            className={`list-group-item`}
+                            onClick={ () => this.toggle_state(name)}
+                            style={_.get(this.props.selected, name, false) ?
+                                    {backgroundColor: this.props.selected[name]}
+                                    : {}}
+                            >
+                                {name}
+                        </li>
+                    )}
+                </div>
+                <input
+                    placeholder="Add State"
+                    onChange={(e) => this.on_filter_change(e)} 
+                    value={this.props.filter_input}
+                    className="form-control"
+                />
+                <div>
+                    {states.map((name) =>
+                        <li
+                            key={name}
+                            className={`list-group-item`}
+                            onClick={ () => {
+                                this.toggle_state(name);
+                                this.props.dispatch({type:"FILTER_STATES", input: ""});
+                            }}
+                            style={_.get(this.props.selected, name, false) ?
+                                    {backgroundColor: this.props.selected[name]}
+                                    : {}}
+                            >
+                                {name}
+                        </li>
+                    )}
+                </div>
             </div>
         );
     }

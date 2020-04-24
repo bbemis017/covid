@@ -1,12 +1,30 @@
 
+import queryString from 'query-string';
 import _ from 'lodash';
 
 const INITIAL_STATE ={
     current_field: 'New Cases',
-    selected_states: {'USA Total': 'red'},
+    selected_states: {'USA Total': '#FF0000'},
     state_filter: ''
 };
 
+function get_selected_states(query_params, init_state) {
+    let state_list = _.get(query_params, 'state', 'USA Total@0099ff');
+    if (!Array.isArray(state_list)){
+        state_list = [state_list];
+    }
+
+    let state_map = {};
+    _.forEach(state_list, (item) => {
+        let values = _.split(item, '@');
+        state_map[values[0]] = '#' + values[1];
+    });
+
+    if(_.size(state_map) < 1) {
+        return _.clone(init_state.selected_states);
+    }
+    return state_map;
+}
 
 export default function(state = INITIAL_STATE, action) {
 
@@ -51,6 +69,13 @@ export default function(state = INITIAL_STATE, action) {
         return {
             ...state,
             state_filter: action.input
+        }
+    case 'SET_CONFIG':
+        let query_params = queryString.parse(action.query_str);
+        return {
+            ...state,
+            current_field: _.get(query_params, 'field', 'New Cases'),
+            selected_states: get_selected_states(query_params)
         }
     default:
       return state;

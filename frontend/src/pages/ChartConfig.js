@@ -2,32 +2,55 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import {faTimes} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon, } from "@fortawesome/react-fontawesome";
 
 import FieldPicker from '../components/FieldPicker';
 import StatePicker from '../components/StatePicker';
 
 class ChartConfig extends React.Component {
 
-  get_param_str(state_meta, field) {
-    let query_str = '?field=' + field;
-    _.forEach(state_meta, (meta) => {
-        query_str += '&state=' + meta.state + _.replace(meta.color, /#/g, '@')
-    });
-    return query_str;
+  get_query_str() {
+      let query_str = '?field=' + this.props.selected_field;
+      _.forOwn(this.props.selected_states, (color, state) =>{
+        console.log(state,color);
+          query_str += '&state=' + state + _.replace(color, /#/g, '@')
+      });
+      return query_str;
+  }
+
+  componentDidMount() {
+    this.props.dispatch({type: 'SET_CONFIG', query_str: this.props.location.search});
   }
 
   render() {
-    let state_meta = [{state: 'Illinois', color: '#001133'}];
     return (
       <div className="chart-config container">
-          <h1>Graph Options</h1>
+          <Link
+            to={"/chart/" + this.props.location.search}
+            className="corner-icon float-right"
+          >
+                <FontAwesomeIcon
+                    icon={faTimes}
+                    size="lg"
+                    color={'#464a47'}
+                />
+          </Link>
+          <h2>Options</h2>
+          <hr/>
           <FieldPicker></FieldPicker>
+          <hr/>
           <StatePicker></StatePicker>
-          <Link to={"/chart" + this.get_param_str(state_meta, 'New Cases')}>
+          <hr/>
+          <Link
+            to={"/chart/" + this.get_query_str()}
+            className="float-right"
+          >
             <button
                 type="button"
                 className="btn btn-outline-primary"
-                >Apply</button>
+                >Apply
+            </button>
           </Link>
       </div>
     );
@@ -35,9 +58,10 @@ class ChartConfig extends React.Component {
 }
 
 function mapStateToProps(state) {
-  state = state.all_reducers;
+  state = state.graph_config;
   return {
-    // raw_data: state.covid_data.raw
+    selected_field: state.current_field,
+    selected_states: state.selected_states
   };
 }
 

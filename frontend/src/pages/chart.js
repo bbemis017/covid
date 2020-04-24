@@ -18,7 +18,6 @@ import { Link } from 'react-router-dom';
 
 class ChartPage extends React.Component {
 
-  //hex colors https://htmlcolorcodes.com/
   get_state_meta(query_params){
     let states = _.get(query_params, 'state', 'USA Total@0099ff');
     if (!Array.isArray(states)){
@@ -76,22 +75,27 @@ class ChartPage extends React.Component {
       let data_points = this.get_data_points(field, state_list, this.props.raw_data);
       return (
         <div className="chart-page">
-            <Link to={"/config/" + this.props.location.search}>
+            <Link
+                to={"/config/" + this.props.location.search}
+                className="corner-icon float-right"
+            >
                 <FontAwesomeIcon
                     icon={faFilter}
                     size="lg"
-                    className="float-right"
                     color={'#464a47'}
                 />
             </Link>
-            <Link to="/">
+            <Link
+                to="/"
+                className="corner-icon"
+            >
                 <FontAwesomeIcon
                     icon={faArrowLeft}
                     size="lg"
                     color={'#464a47'}
                 />
             </Link>
-            <h3>{field}</h3>
+            <h4 className="text-center">{field}</h4>
             <ResponsiveContainer width="100%" height="100%" minWidth="300px" minHeight="300px">
                 <LineChart data={data_points}
                     margin={{ top: 5, right: 5, left: 0, bottom: 100 }}>

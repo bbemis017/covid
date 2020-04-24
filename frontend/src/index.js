@@ -39,7 +39,7 @@ class Root extends React.Component {
                 </Switch>
               </Router>
             </Provider>
-          </React.StrictMode>
+         </React.StrictMode>
         );
     }
 }

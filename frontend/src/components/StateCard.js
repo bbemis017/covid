@@ -22,14 +22,17 @@ class StateCard extends React.Component {
 
   render() {
     let state_records = this.get_state_records(this.props.state_name);
+    let chart_params = '?field=New Cases&state=' + this.props.state_name + '@FF0000';
     return (
         <div className="state-card">
             <div className="card">
               <div className="card-body">
-                  <Link to="/chart">
+                  <Link
+                    to={"/chart/" + chart_params}
+                    className="float-right"
+                  >
                     <FontAwesomeIcon
                       icon={faChartLine}
-                      className="float-right"
                       size="lg"
                       color={'blue'}
                     />
