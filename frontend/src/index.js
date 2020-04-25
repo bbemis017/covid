@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import overview from './pages/overview'
-// import ChartPage from './pages/chart';
+import ChartPage from './pages/chart';
+import ChartConfig from './pages/ChartConfig';
 import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -31,13 +32,14 @@ class Root extends React.Component {
             <Provider store={this.store}>
               <Router>
                 <Switch>
-                  <Route path="/chart" component={App} />
-                  {/* <Route path="/chart" component={ChartPage} /> */}
+                  <Route path="/old_chart" component={App} />
+                  <Route path="/chart" component={ChartPage} />
+                  <Route path="/config" component={ChartConfig} />
                   <Route path="/" component={overview} />
                 </Switch>
               </Router>
             </Provider>
-          </React.StrictMode>
+         </React.StrictMode>
         );
     }
 }

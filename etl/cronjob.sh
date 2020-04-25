@@ -39,6 +39,7 @@ git pull origin aws-ec2
 
 # get python virtual environment
 source "local_env/bin/activate"
+pip3 install -r requirements.txt
 
 # run update script
 python update.py
@@ -51,4 +52,5 @@ git push origin aws-ec2
 
 # rebuild frontend application
 cd ../frontend
+yarn install
 yarn build

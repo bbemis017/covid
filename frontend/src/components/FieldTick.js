@@ -70,8 +70,7 @@ class FieldTick extends React.Component {
                 <span style={{color: color}}>{meta.days} day{meta.days > 1? 's': ''}</span>
             </div>
             <div>
-                <span>{this.props.field}: </span>
-                <span>{this.format_number(last_record[this.props.field])}</span>
+                <span>{this.props.field}: {this.format_number(last_record[this.props.field])}</span>
             </div>
         </div>
     );
