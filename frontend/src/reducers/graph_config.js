@@ -5,7 +5,8 @@ import _ from 'lodash';
 const INITIAL_STATE ={
     current_field: 'New Cases',
     selected_states: {'USA Total': '#FF0000'},
-    state_filter: ''
+    state_filter: '',
+    filtered_states: []
 };
 
 function get_selected_states(query_params, init_state) {
@@ -68,7 +69,8 @@ export default function(state = INITIAL_STATE, action) {
          */
         return {
             ...state,
-            state_filter: action.input
+            state_filter: action.input,
+            filtered_states: action.states
         }
     case 'SET_CONFIG':
         let query_params = queryString.parse(action.query_str);

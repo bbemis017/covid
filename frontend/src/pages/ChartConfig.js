@@ -13,7 +13,6 @@ class ChartConfig extends React.Component {
   get_query_str() {
       let query_str = '?field=' + this.props.selected_field;
       _.forOwn(this.props.selected_states, (color, state) =>{
-        console.log(state,color);
           query_str += '&state=' + state + _.replace(color, /#/g, '@')
       });
       return query_str;

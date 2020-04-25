@@ -2,8 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-
 class StatePicker extends React.Component {
+
+    componentDidMount() {
+        this.props.dispatch({
+            type: 'FILTER_STATES',
+            input: '',
+            states: this.filter_states('')
+        });
+      }
 
     get_random_rgb_color(){
         /**
@@ -41,10 +48,19 @@ class StatePicker extends React.Component {
          * This function gets called whenever the text in the search box changes
          * and updates the state filter
          */
-        this.props.dispatch({
-            type: "FILTER_STATES",
-            input: event.target.value
-        });
+        let input = event.target.value;
+        let states = this.filter_states(input);
+
+         // If only one state is left, auto select it
+        if(_.isEqual(states.length, 1) && _.isEqual(states[0].toLowerCase(), input.toLowerCase())) {
+            this.toggle_state(states[0]);
+        } else {
+            this.props.dispatch({
+                type: "FILTER_STATES",
+                input: input,
+                states: states
+            });
+        }
     }
 
     toggle_state(name){
@@ -64,16 +80,22 @@ class StatePicker extends React.Component {
                 color: this.get_random_hex_color()
             });
         }
+        this.props.dispatch({
+            type:"FILTER_STATES",
+            input: "",
+            states: this.filter_states('')
+        });
+    }
+
+    filter_states(input) {
+        return _.filter(this.props.all_states, (name) => {
+            return _.includes(name.toLowerCase(), input.toLowerCase())
+                && input.length > 0 // don't display anything if search is empty
+                && !_.has(this.props.selected, name); // don't display selected states
+        });
     }
 
     render() {
-
-        // filter the states based on the filter_input
-        let states = _.filter(this.props.all_states, (name) => {
-            return _.includes(name.toLowerCase(), this.props.filter_input.toLowerCase())
-                && this.props.filter_input.length > 0 // don't display anything if search is empty
-                && !_.has(this.props.selected, name); // don't display selected states
-        });
         return (
             <div className="state-picker container list-group">
                 <h4>Selected States:</h4>
@@ -96,16 +118,14 @@ class StatePicker extends React.Component {
                     onChange={(e) => this.on_filter_change(e)} 
                     value={this.props.filter_input}
                     className="form-control"
+                    id="filter-states"
                 />
                 <div>
-                    {states.map((name) =>
+                    {this.props.filtered_states.map((name) =>
                         <li
                             key={name}
                             className={`list-group-item`}
-                            onClick={ () => {
-                                this.toggle_state(name);
-                                this.props.dispatch({type:"FILTER_STATES", input: ""});
-                            }}
+                            onClick={ () => {this.toggle_state(name)}}
                             style={_.get(this.props.selected, name, false) ?
                                     {backgroundColor: this.props.selected[name]}
                                     : {}}
@@ -123,7 +143,8 @@ function mapStateToProps(state) {
     return {
       selected: state.graph_config.selected_states,
       all_states: state.all_reducers.covid_data.states,
-      filter_input: state.graph_config.state_filter
+      filter_input: state.graph_config.state_filter,
+      filtered_states: state.graph_config.filtered_states
     };
   }
 
