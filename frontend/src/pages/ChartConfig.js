@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon, } from "@fortawesome/react-fontawesome";
+import ReactGA from 'react-ga';
 
 import FieldPicker from '../components/FieldPicker';
 import StatePicker from '../components/StatePicker';
@@ -16,6 +17,16 @@ class ChartConfig extends React.Component {
           query_str += '&state=' + state + _.replace(color, /#/g, '@')
       });
       return query_str;
+  }
+
+  applyConfig() {
+    let url = '/chart/' + this.get_query_str();
+    this.props.history.push(url);
+    ReactGA.event({
+      category: 'ChartConfig',
+      action: 'Apply',
+      label: url
+    });
   }
 
   componentDidMount() {
@@ -41,16 +52,12 @@ class ChartConfig extends React.Component {
           <hr/>
           <StatePicker></StatePicker>
           <hr/>
-          <Link
-            to={"/chart/" + this.get_query_str()}
-            className="float-right"
-          >
-            <button
-                type="button"
-                className="btn btn-outline-primary"
-                >Apply
-            </button>
-          </Link>
+          <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={()=> this.applyConfig()}
+              >Apply
+          </button>
       </div>
     );
   }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import queryString from 'query-string';
 import  _ from 'lodash';
 import {
     LineChart,
@@ -14,33 +13,34 @@ import {
 import {faFilter, faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon, } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 
 class ChartPage extends React.Component {
 
-  get_state_meta(query_params){
-    let states = _.get(query_params, 'state', 'USA Total@0099ff');
-    if (!Array.isArray(states)){
-        states = [states];
-    }
-
-    let meta_list = [];
-    _.forEach(states, (item) => {
-        let values = _.split(item, '@');
-        meta_list.push({'state': values[0], 'color': '#' + values[1]});
+  componentDidMount() {
+    this.props.dispatch({
+        type: 'SET_CONFIG',
+        query_str: this.props.location.search
     });
-    return meta_list;
   }
 
-  get_state_list(state_meta){
-    let states = [];
-    _.forEach(state_meta, (meta) =>{
-        states.push(meta.state);
+  componentDidUpdate() {
+    ReactGA.event({
+        category: 'Chart',
+        action: 'Field',
+        label: this.props.field
     });
-    return states;
+    _.forOwn(this.props.selected_states, (color, state) => {
+        ReactGA.event({
+            category: 'Chart',
+            action: 'State',
+            label: state
+        });
+    });
   }
 
-  get_data_points(data_type, state_list, raw_data) { 
+  get_data_points(data_type, state_map, raw_data) { 
     /* Each point should contain:
      * 	Date - x value
      *  state 1 - y value
@@ -49,7 +49,7 @@ class ChartPage extends React.Component {
     let date_map = {};
 
     _.forEach(raw_data, (record) => {
-        if( _.includes(state_list, record['State']) ){
+        if( _.has(state_map, record['State']) ){
             if( !_.has(date_map, record['Date']) ){
                 date_map[record['Date']] = {}
             }
@@ -67,12 +67,7 @@ class ChartPage extends React.Component {
   }
 
   render() {
-      let query_params = queryString.parse(this.props.location.search);
-      let field = _.get(query_params, 'field', 'New Cases')
-      let state_meta = this.get_state_meta(query_params);
-      let state_list = this.get_state_list(state_meta);
-
-      let data_points = this.get_data_points(field, state_list, this.props.raw_data);
+      let data_points = this.get_data_points(this.props.field, this.props.selected_states, this.props.raw_data);
       return (
         <div className="chart-page">
             <Link
@@ -95,19 +90,19 @@ class ChartPage extends React.Component {
                     color={'#464a47'}
                 />
             </Link>
-            <h4 className="text-center">{field}</h4>
+            <h4 className="text-center">{this.props.field}</h4>
             <ResponsiveContainer width="100%" height="100%" minWidth="300px" minHeight="300px">
                 <LineChart data={data_points}
                     margin={{ top: 5, right: 5, left: 0, bottom: 100 }}>
                     <XAxis dataKey="Date" tick={{angle: 90, dy: 40}}/>
                     <YAxis />
                     <Tooltip />
-                    {state_meta.map((meta) => 
+                    {Object.keys(this.props.selected_states).map((state, index) => 
                         <Line
-                            key={meta.state}
+                            key={state}
                             type="monotone"
-                            dataKey={meta.state}
-                            stroke={meta.color}
+                            dataKey={state}
+                            stroke={this.props.selected_states[state]}
                             strokeWidth="3"
                         />
                     )}
@@ -120,9 +115,10 @@ class ChartPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    state = state.all_reducers;
     return {
-        raw_data: state.covid_data.raw
+        raw_data: state.all_reducers.covid_data.raw,
+        field: state.graph_config.current_field,
+        selected_states: state.graph_config.selected_states
     };
 }
 

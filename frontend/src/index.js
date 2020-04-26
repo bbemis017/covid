@@ -9,9 +9,11 @@ import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import root_reducer from './reducers/index';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
+import { createBrowserHistory } from 'history';
 import covidData from './worldometer';
 import { connect } from 'react-redux';
+import ReactGA from 'react-ga';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -20,17 +22,30 @@ class Root extends React.Component {
   constructor() {
     super();
     this.store = createStore(root_reducer);
+    this.history = createBrowserHistory();
+    this.history.listen(this.onRouteChange);
   }
 
   componentDidMount() {
     this.store.dispatch({type: 'RECEIVE_COVID_DATA', data: covidData});
+    ReactGA.initialize(process.env.REACT_APP_GA_ID);
+    ReactGA.set({page: this.history.location.pathname}); // Update the user's current page
+    ReactGA.pageview(this.history.location.pathname);
+  }
+
+  onRouteChange(location) {
+    let data = {
+      page: location.pathname
+    };
+    ReactGA.set(data); // Update the user's current page
+    ReactGA.pageview(location.pathname); // Record a pageview for the given page
   }
 
   render() {
         return (
-            <React.StrictMode>
+          <React.StrictMode>
             <Provider store={this.store}>
-              <Router>
+              <Router history={this.history}>
                 <Switch>
                   <Route path="/old_chart" component={App} />
                   <Route path="/chart" component={ChartPage} />

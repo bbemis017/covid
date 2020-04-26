@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import ReactGA from 'react-ga';
 
 class StatePicker extends React.Component {
 
@@ -18,6 +19,14 @@ class StatePicker extends React.Component {
     }
 
     select(name){
+      if (this.props.selected_states && !this.props.selected_states[name].selected){
+          // if state is being selected, log to GA
+          ReactGA.event({
+            category: 'Chart',
+            action: 'State',
+            label: name
+        });
+      }
       this.props.dispatch({type: "TOGGLE_STATE", name: name, color: this.get_random_color()})
     }
 

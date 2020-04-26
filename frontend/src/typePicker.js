@@ -1,11 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import _ from 'lodash';
+import ReactGA from 'react-ga';
 
 class TypePicker extends React.Component {
 
     selectType(type){
         this.props.dispatch({type: 'SELECT_DATA_COLUMN', column: type});
+        ReactGA.event({
+            category: 'Chart',
+            action: 'Field',
+            label: type
+        });
     }
 
 	render() {
