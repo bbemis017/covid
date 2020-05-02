@@ -40,6 +40,7 @@ class StateCard extends React.Component {
                   <h5 className="card-title">{this.props.state_name}</h5>
                   <FieldTick field={'New Cases'} records={state_records}></FieldTick>
                   <FieldTick field={'New Deaths'} records={state_records}></FieldTick>
+                  <FieldTick field={'Active Cases'} records={state_records}></FieldTick>
                   <FieldTick field={'Total Cases'} records={state_records}></FieldTick>
                   <FieldTick field={'Total Deaths'} records={state_records}></FieldTick>
                   <FieldTick field={'Total Tests'} records={state_records} positive_direction={-1}></FieldTick>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import StateCard from '../components/StateCard';
+import LastUpdated from '../components/LastUpdated';
 
 class Overview extends React.Component {
 
@@ -24,6 +25,7 @@ class Overview extends React.Component {
               <button type="button" className="btn btn-outline-primary">New Graph</button>
             </Link>
           </div>
+          <LastUpdated></LastUpdated>
           <div className="row state-stats">
             <div className="col-lg-4">
               <StateCard state_name={'USA Total'}></StateCard>
