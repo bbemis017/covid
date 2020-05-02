@@ -1,15 +1,51 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+// body {
+//   margin: 0;
+//   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+//     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+//     sans-serif;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+// }
+
+// code {
+//   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+//     monospace;
+// }
+
+html, body, #root {
+  height: 100%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.col-centered {
+  display: inline-block;
+  float: none;
+  /* inline-block space fix */
+  margin-right: -4px;
+  background-color: #ccc;
+  border: 1px solid #ddd;
+}
+
+.corner-icon {
+  display: inline-block;
+  margin: 8px 8px 8px 8px;
+}
+
+.overview {
+  .state-stats {
+    margin: 15px 0;
+  }
+
+  .state-card {
+    margin: 5px 0;
+  }
+
+  .graph-links {
+    margin: 0 15px;
+  }
+}
+
+.chart-page {
+  height: 85%;
 }
 
 .state-picker {
@@ -52,9 +88,4 @@ code {
       height: 260px;
     }
   }
-}
-
-.corner-icon {
-  display: inline-block;
-  margin: 8px 8px 8px 8px;
 }
