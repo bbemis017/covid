@@ -90,3 +90,10 @@ html, body, #root {
     font-size: small;
   }
 }
+
+.card-decline {
+  a {
+    // color: black;
+    color: inherit;
+  }
+}

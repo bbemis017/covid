@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import  _ from 'lodash';
 import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from 'react-router-dom';
 
 class DeclineCard extends React.Component {
 
@@ -22,10 +23,12 @@ class DeclineCard extends React.Component {
     let meta = this.props.direction_map[this.props.state][this.props.field];
 
     let color = _.isEqual(meta.direction, positive_dir)? 'red': 'green';
+    let chart_params = `/chart?field=${this.props.field}&state=${this.props.state}@FF0000`;
     return (
-        <div className="decline-card">
+        <div>
             <div className="state-card">
-                <div className="card">
+                <div className="card card-decline">
+                  <Link to={chart_params}>
                     <div className="card-body">
                         <div className="float-right">
                             <FontAwesomeIcon
@@ -41,6 +44,7 @@ class DeclineCard extends React.Component {
                             </span>
                         </div>
                     </div>
+                  </Link>
                 </div>
             </div>
         </div>

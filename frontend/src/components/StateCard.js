@@ -9,13 +9,13 @@ import FieldTick from './FieldTick';
 class StateCard extends React.Component {
 
   render() {
-    let chart_params = '?field=New Cases&state=' + this.props.state_name + '@FF0000';
+    let chart_params = '/chart?field=New Cases&state=' + this.props.state_name + '@FF0000';
     return (
         <div className="state-card">
             <div className="card">
               <div className="card-body">
                   <Link
-                    to={"/chart/" + chart_params}
+                    to={chart_params}
                     className="float-right"
                   >
                     <FontAwesomeIcon

@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import {Dropdown} from 'react-bootstrap';
 
 import DeclineCard from '../components/DeclineCard';
 
 class FieldDeclines extends React.Component {
 
     render() {
-        let field = 'New Cases';
+        let field = this.props.current_field;
         let directions = [];
 
         // filter direction meta for the current field and the state into the list
@@ -24,7 +25,22 @@ class FieldDeclines extends React.Component {
         return (
             <div className="field-declines">
                 <h3 className="text-center">Longest Declines</h3>
-                <p className="text-center">in {field}</p>
+                <p className="text-center">in
+                    <Dropdown size="sm">
+                        <Dropdown.Toggle>
+                            {field}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            {this.props.fields.map((field) =>
+                                <Dropdown.Item
+                                    onClick={() => this.props.dispatch({type: 'DECLINES_SET_FIELD', field: field})}
+                                >
+                                    {field}
+                                </Dropdown.Item>
+                            )}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </p>
                 {directions.map((partition) => 
                     partition.map((state) => 
                         <DeclineCard key={state.state} state={state.state} field={field}></DeclineCard>
@@ -37,7 +53,9 @@ class FieldDeclines extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        direction_map: state.all_reducers.covid_data.directions
+        direction_map: state.all_reducers.covid_data.directions,
+        current_field: state.declines.current_field,
+        fields: state.all_reducers.covid_data.field_list
     };
   }
 
