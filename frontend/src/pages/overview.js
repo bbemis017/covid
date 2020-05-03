@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import StateCard from '../components/StateCard';
 import LastUpdated from '../components/LastUpdated';
+import FieldDeclines from '../components/FieldDeclines';
 
 class Overview extends React.Component {
 
@@ -37,6 +38,8 @@ class Overview extends React.Component {
               <StateCard state_name={'Illinois'}></StateCard>
             </div>
           </div>
+          <hr/>
+          <FieldDeclines></FieldDeclines>
           <hr/>
       </div>
     );

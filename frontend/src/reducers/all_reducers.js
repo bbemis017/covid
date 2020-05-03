@@ -1,6 +1,8 @@
 import covidData from '../worldometer';
 import _ from 'lodash';
 
+import CovidTransform from '../tools/Covid19Data';
+
 function get_state_map() {
   let states = {};
   for(let i = 0; i < covidData.length; i++) {
@@ -13,36 +15,14 @@ function get_state_map() {
   return states;
 }
 
-function get_state_list(covid_records) {
-  /**
-   * Gets a unique sorted array of all the states in the raw covid data
-   */
-  let state_map = {};
-  _.forEach(covid_records, (record) => {
-    let state = record['State'];
-    if(!_.has(state_map, state)){
-      state_map[state] = true;
-    }
-  });
-  let states = _.keys(state_map);
-  return _.sortBy(states, (state)=> {return state.toLowerCase();});
-}
-
-function get_column_list() {
-  let columns = [];
-  _.map(covidData[0], (value, column) => {
-    if( column !== 'State' && column !== 'Date') {
-      columns.push(column);
-    }
-  });
-  return columns;
-}
-
 const INITIAL_STATE ={
     covid_data: {
       raw: [],
-      field_list: get_column_list(),
-      states: []
+      state_records: {},
+      field_list: [],
+      states: [],
+      directions: {},
+      last_date: {}
     },
     selected_states: get_state_map(),
     state_picker: {
@@ -50,7 +30,7 @@ const INITIAL_STATE ={
     },
     data_type_picker: {
       type: 'New Cases',
-      columns: get_column_list()
+      columns: []
     }
 };
 
@@ -84,11 +64,19 @@ export default function(state = INITIAL_STATE, action) {
         }
       }
     case 'RECEIVE_COVID_DATA':
+      let dataTransform = new CovidTransform(action.data);
       return {
         ...state,
         covid_data: {
           raw: action.data,
-          states: get_state_list(action.data)
+          state_records: dataTransform.state_records,
+          field_list: dataTransform.field_list,
+          states: dataTransform.state,
+          directions: dataTransform.state_directions,
+          last_date: dataTransform.last_date_records
+        },
+        data_type_picker: {
+          columns: dataTransform.field_list
         }
       }
     default:
