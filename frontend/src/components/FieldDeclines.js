@@ -25,22 +25,22 @@ class FieldDeclines extends React.Component {
         return (
             <div className="field-declines">
                 <h3 className="text-center">Longest Declines</h3>
-                <p className="text-center">in
-                    <Dropdown size="sm">
-                        <Dropdown.Toggle>
-                            {field}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            {this.props.fields.map((field) =>
-                                <Dropdown.Item
-                                    onClick={() => this.props.dispatch({type: 'DECLINES_SET_FIELD', field: field})}
-                                >
-                                    {field}
-                                </Dropdown.Item>
-                            )}
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </p>
+                <p className="text-center">in</p>
+                <Dropdown className="text-center">
+                    <Dropdown.Toggle variant="outline-primary" size="sm">
+                        {field}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        {this.props.fields.map((field) =>
+                            <Dropdown.Item
+                                onClick={() => this.props.dispatch({type: 'DECLINES_SET_FIELD', field: field})}
+                                key={field}
+                            >
+                                {field}
+                            </Dropdown.Item>
+                        )}
+                    </Dropdown.Menu>
+                </Dropdown>
                 {directions.map((partition) => 
                     partition.map((state) => 
                         <DeclineCard key={state.state} state={state.state} field={field}></DeclineCard>
