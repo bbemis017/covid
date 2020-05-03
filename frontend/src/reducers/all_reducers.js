@@ -71,7 +71,7 @@ export default function(state = INITIAL_STATE, action) {
           raw: action.data,
           state_records: dataTransform.state_records,
           field_list: dataTransform.field_list,
-          states: dataTransform.state,
+          states: dataTransform.states,
           directions: dataTransform.state_directions,
           last_date: dataTransform.last_date_records
         },

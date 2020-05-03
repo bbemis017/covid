@@ -2,10 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {Dropdown} from 'react-bootstrap';
+import ReactGA from 'react-ga';
 
 import DeclineCard from '../components/DeclineCard';
 
 class FieldDeclines extends React.Component {
+
+    onChangeField(field) {
+        this.props.dispatch({type: 'DECLINES_SET_FIELD', field: field});
+        ReactGA.event({
+            category: 'DecliningFields',
+            action: 'Field',
+            label: field
+        });
+    }
 
     render() {
         let field = this.props.current_field;
@@ -33,7 +43,7 @@ class FieldDeclines extends React.Component {
                     <Dropdown.Menu>
                         {this.props.fields.map((field) =>
                             <Dropdown.Item
-                                onClick={() => this.props.dispatch({type: 'DECLINES_SET_FIELD', field: field})}
+                                onClick={() => this.onChangeField(field)}
                                 key={field}
                             >
                                 {field}
