@@ -15,12 +15,11 @@ on_error() {
     # Send email on failure
     printf "ERROR\n"
     message="CronJobError"
-    error_log=`cat ~/covid_cron.log`
 
     aws ses send-email \
         --from "${NOTIFY_EMAIL}" \
         --destination "ToAddresses=${NOTIFY_EMAIL}" \
-        --message "Subject={Data='EC2 CronJob Error',Charset=utf8},Body={Text={Data='Job Error',Charset=utf8},Html={Data='${message}\n\n${error_log}',Charset=utf8}}"
+        --message "Subject={Data='EC2 CronJob Error',Charset=utf8},Body={Text={Data='Job Error',Charset=utf8},Html={Data='${message}',Charset=utf8}}"
 }
 
 export_env() {
