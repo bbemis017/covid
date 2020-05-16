@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# =========================================================================================
+# Manages Update process
+# The actual data update is handled in update.py
+# this script is in charge of setting up environment, running update,
+# committing changes, and re-deploying App
+# =========================================================================================
+
 # call on_error function if there is an error
 set -e
 trap 'on_error' ERR
@@ -8,11 +15,12 @@ on_error() {
     # Send email on failure
     printf "ERROR\n"
     message="CronJobError"
+    error_log=`cat ~/covid_cron.log`
 
     aws ses send-email \
         --from "${NOTIFY_EMAIL}" \
         --destination "ToAddresses=${NOTIFY_EMAIL}" \
-        --message "Subject={Data='EC2 CronJob Error',Charset=utf8},Body={Text={Data='Job Error',Charset=utf8},Html={Data='${message}',Charset=utf8}}"
+        --message "Subject={Data='EC2 CronJob Error',Charset=utf8},Body={Text={Data='Job Error',Charset=utf8},Html={Data='${message}\n\n${error_log}',Charset=utf8}}"
 }
 
 export_env() {
@@ -54,3 +62,6 @@ git push origin aws-ec2
 cd ../frontend
 yarn install
 yarn build
+
+# Deploy to S3 bucket
+aws s3 sync build s3://covid19.scrapeit.net --delete
