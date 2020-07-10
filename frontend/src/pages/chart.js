@@ -40,7 +40,7 @@ class ChartPage extends React.Component {
     });
   }
 
-  get_data_points(data_type, state_map, raw_data) { 
+  get_data_points(start_date, end_date, data_type, state_map, raw_data) { 
     /* Each point should contain:
      * 	Date - x value
      *  state 1 - y value
@@ -59,15 +59,24 @@ class ChartPage extends React.Component {
 
     let points = [];
     _.forEach(date_map, (data, date) => {
-        let point = {...data, 'Date': date};
-        points.push(point);
+        let date_int = parseInt(date);
+        if (date_int <= end_date && date_int >= start_date) {
+            let point = {...data, 'Date': date};
+            points.push(point);
+        }
     });
 
     return points;
   }
 
   render() {
-      let data_points = this.get_data_points(this.props.field, this.props.selected_states, this.props.raw_data);
+      let data_points = this.get_data_points(
+          parseInt(this.props.start_date),
+          parseInt(this.props.end_date),
+          this.props.field,
+          this.props.selected_states,
+          this.props.raw_data
+      );
       return (
         <div className="chart-page container">
             <div className="header-line row">
@@ -126,7 +135,9 @@ function mapStateToProps(state) {
     return {
         raw_data: state.all_reducers.covid_data.raw,
         field: state.graph_config.current_field,
-        selected_states: state.graph_config.selected_states
+        selected_states: state.graph_config.selected_states,
+        start_date: state.graph_config.start_date,
+        end_date: state.graph_config.end_date
     };
 }
 

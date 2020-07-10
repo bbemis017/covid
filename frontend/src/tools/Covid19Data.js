@@ -5,6 +5,8 @@ class Covid19Data {
     constructor(raw_data) {
         this.raw_data = raw_data;
 
+        this.processed_records = [];
+
         this.state_records = this.get_records_by_state(this.raw_data);
         this.states = _.keys(this.state_records);
         this.field_list = this.get_field_list(this.raw_data);
