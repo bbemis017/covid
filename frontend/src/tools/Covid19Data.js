@@ -81,14 +81,16 @@ class Covid19Data {
         for(let index = state_records.length - 2; index >= 0; index--){
           let new_val = parseInt(state_records[index][field]);
           let new_dir = 0;
-          if( last_val > new_val){
+          if ( _.isEqual(last_val, new_val) ) {
+              new_dir = 0;
+          } else if( last_val > new_val){
             // value has ticked up
             new_dir = 1;
           } else{
             new_dir = -1;
           }
     
-          if(index < state_records.length - 2 && !_.isEqual(new_dir, dir)){
+          if(index < state_records.length - 2 && (!_.isEqual(new_dir, dir) && !_.isEqual(new_dir, 0)) ){
             // Change in direction, stop processing
             break;
           }
