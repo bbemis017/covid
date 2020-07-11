@@ -7,8 +7,8 @@ const INITIAL_STATE ={
     selected_states: {'USA Total': '#FF0000'},
     state_filter: '',
     filtered_states: [],
-    end_date: convert_date_to_str(new Date()), // Sets end_date to current date
-    start_date: convert_date_to_str(get_date_offset(new Date(), -90) ) // sets start_date to 90 days in the past
+    end_date: new Date(), // Sets end_date to current date
+    start_date: get_date_offset(new Date(), -90) // sets start_date to 90 days in the past
 };
 
 function get_selected_states(query_params, init_state) {
@@ -27,6 +27,14 @@ function get_selected_states(query_params, init_state) {
         return _.clone(init_state.selected_states);
     }
     return state_map;
+}
+
+function get_js_date(date_str) {
+    /**Converts date string YYYYMMDD to javascript date */
+    let year = date_str.substring(0,4);
+    let month = date_str.substring(4,6);
+    let day = date_str.substring(6,8);
+    return new Date(year, month - 1, day);
 }
 
 function convert_date_to_str(date) {
@@ -90,12 +98,24 @@ export default function(state = INITIAL_STATE, action) {
         }
     case 'SET_CONFIG':
         let query_params = queryString.parse(action.query_str);
+        let start = _.get(query_params, 'start', convert_date_to_str(state.start_date));
+        let end =  _.get(query_params, 'end', convert_date_to_str(state.end_date));
         return {
             ...state,
             current_field: _.get(query_params, 'field', 'New Cases'),
             selected_states: get_selected_states(query_params),
-            start_date: _.get(query_params, 'start', state.start_date),
-            end_date: _.get(query_params, 'end', state.end_date)
+            start_date: get_js_date(start),
+            end_date: get_js_date(end)
+        }
+    case 'SET_START':
+        return {
+            ...state,
+            start_date: action.start
+        }
+    case 'SET_END':
+        return {
+            ...state,
+            end_date: action.end
         }
     default:
       return state;

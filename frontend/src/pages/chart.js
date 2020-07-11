@@ -56,12 +56,11 @@ class ChartPage extends React.Component {
             date_map[record['Date']][record['State']] = record[data_type];
         }
     });
-
     let points = [];
-    _.forEach(date_map, (data, date) => {
-        let date_int = parseInt(date);
-        if (date_int <= end_date && date_int >= start_date) {
-            let point = {...data, 'Date': date};
+    _.forEach(date_map, (data, date_str) => {
+        let date = this.get_js_date(date_str);
+        if (date <= end_date && date >= start_date) {
+            let point = {...data, 'Date': date_str};
             points.push(point);
         }
     });
@@ -69,10 +68,18 @@ class ChartPage extends React.Component {
     return points;
   }
 
+  get_js_date(date_str) {
+      /**Converts date string YYYYMMDD to javascript date */
+      let year = date_str.substring(0,4);
+      let month = date_str.substring(4,6);
+      let day = date_str.substring(6,8);
+      return new Date(year, month - 1, day);
+  }
+
   render() {
       let data_points = this.get_data_points(
-          parseInt(this.props.start_date),
-          parseInt(this.props.end_date),
+          this.props.start_date,
+          this.props.end_date,
           this.props.field,
           this.props.selected_states,
           this.props.raw_data
