@@ -8,7 +8,8 @@ const INITIAL_STATE ={
     state_filter: '',
     filtered_states: [],
     end_date: new Date(), // Sets end_date to current date
-    start_date: get_date_offset(new Date(), -90) // sets start_date to 90 days in the past
+    start_date: get_date_offset(new Date(), -90), // sets start_date to 90 days in the past
+    average: 7 // rolling average
 };
 
 function get_selected_states(query_params, init_state) {
@@ -105,7 +106,8 @@ export default function(state = INITIAL_STATE, action) {
             current_field: _.get(query_params, 'field', 'New Cases'),
             selected_states: get_selected_states(query_params),
             start_date: get_js_date(start),
-            end_date: get_js_date(end)
+            end_date: get_js_date(end),
+            average: _.get(query_params, 'average', state.average)
         }
     case 'SET_START':
         return {
@@ -116,6 +118,11 @@ export default function(state = INITIAL_STATE, action) {
         return {
             ...state,
             end_date: action.end
+        }
+    case 'SET_AVERAGE':
+        return {
+            ...state,
+            average: action.average
         }
     default:
       return state;

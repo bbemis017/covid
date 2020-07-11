@@ -65,7 +65,44 @@ class ChartPage extends React.Component {
         }
     });
 
-    return points;
+    return this.get_rolling_avg_points(points, this.props.average, state_map);
+  }
+
+  get_rolling_avg_points(data_points, avg, state_map) {
+      /**Creates a rolling average in the data points */
+
+    // return empty if there aren't any data points
+    if(_.isEqual(data_points.length, 0) ) return [];
+
+    // Create a map of sums for each state
+    let sum_map = {};
+    _.forEach(state_map, (color, state) => {
+        sum_map[state] = 0;
+    });
+
+    let new_points = [];
+
+    for(let index = 0; index < data_points.length; index++) {
+
+        // Add values to each state's sum
+        _.forEach(sum_map, (sum, state) => {
+            sum_map[state] += data_points[index][state];
+        });
+
+        if (index % avg === 0 && index > 0) {
+            let point = {'Date': data_points[index]['Date']}; // TODO starting off with just the ending date of each average
+
+            _.forEach(sum_map, (sum, state) => {
+                point[state] = sum / avg; 
+                sum_map[state] = 0; // reset sum for next average
+            });
+
+            new_points.push(point);
+        }
+
+    }
+
+    return new_points;
   }
 
   get_js_date(date_str) {
@@ -144,7 +181,8 @@ function mapStateToProps(state) {
         field: state.graph_config.current_field,
         selected_states: state.graph_config.selected_states,
         start_date: state.graph_config.start_date,
-        end_date: state.graph_config.end_date
+        end_date: state.graph_config.end_date,
+        average: state.graph_config.average
     };
 }
 
