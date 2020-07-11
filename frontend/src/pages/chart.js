@@ -40,7 +40,7 @@ class ChartPage extends React.Component {
     });
   }
 
-  get_data_points(data_type, state_map, raw_data) { 
+  get_data_points(start_date, end_date, data_type, state_map, raw_data) { 
     /* Each point should contain:
      * 	Date - x value
      *  state 1 - y value
@@ -56,18 +56,71 @@ class ChartPage extends React.Component {
             date_map[record['Date']][record['State']] = record[data_type];
         }
     });
-
     let points = [];
-    _.forEach(date_map, (data, date) => {
-        let point = {...data, 'Date': date};
-        points.push(point);
+    _.forEach(date_map, (data, date_str) => {
+        let date = this.get_js_date(date_str);
+        if (date <= end_date && date >= start_date) {
+            let point = {...data, 'Date': date_str};
+            points.push(point);
+        }
     });
 
-    return points;
+    return this.get_rolling_avg_points(points, this.props.average, state_map);
+  }
+
+  get_rolling_avg_points(data_points, avg, state_map) {
+      /**Creates a rolling average in the data points */
+
+    // return empty if there aren't any data points
+    if(_.isEqual(data_points.length, 0) ) return [];
+
+    // Create a map of sums for each state
+    let sum_map = {};
+    _.forEach(state_map, (color, state) => {
+        sum_map[state] = 0;
+    });
+
+    let new_points = [];
+
+    for(let index = 0; index < data_points.length; index++) {
+
+        // Add values to each state's sum
+        _.forEach(sum_map, (sum, state) => {
+            sum_map[state] += data_points[index][state];
+        });
+
+        if (index % avg === 0 && index > 0) {
+            let point = {'Date': data_points[index]['Date']}; // TODO starting off with just the ending date of each average
+
+            _.forEach(sum_map, (sum, state) => {
+                point[state] = sum / avg; 
+                sum_map[state] = 0; // reset sum for next average
+            });
+
+            new_points.push(point);
+        }
+
+    }
+
+    return new_points;
+  }
+
+  get_js_date(date_str) {
+      /**Converts date string YYYYMMDD to javascript date */
+      let year = date_str.substring(0,4);
+      let month = date_str.substring(4,6);
+      let day = date_str.substring(6,8);
+      return new Date(year, month - 1, day);
   }
 
   render() {
-      let data_points = this.get_data_points(this.props.field, this.props.selected_states, this.props.raw_data);
+      let data_points = this.get_data_points(
+          this.props.start_date,
+          this.props.end_date,
+          this.props.field,
+          this.props.selected_states,
+          this.props.raw_data
+      );
       return (
         <div className="chart-page container">
             <div className="header-line row">
@@ -126,7 +179,10 @@ function mapStateToProps(state) {
     return {
         raw_data: state.all_reducers.covid_data.raw,
         field: state.graph_config.current_field,
-        selected_states: state.graph_config.selected_states
+        selected_states: state.graph_config.selected_states,
+        start_date: state.graph_config.start_date,
+        end_date: state.graph_config.end_date,
+        average: state.graph_config.average
     };
 }
 

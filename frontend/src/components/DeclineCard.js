@@ -31,10 +31,13 @@ class DeclineCard extends React.Component {
                   <Link to={chart_params}>
                     <div className="card-body">
                         <div className="float-right">
-                            <FontAwesomeIcon
-                                icon={_.isEqual(meta.direction, 1)? faArrowUp: faArrowDown}
+                            {!_.isEqual(meta.direction, 0) ?
+                              <FontAwesomeIcon
+                                icon={_.isEqual(meta.direction, 1) ? faArrowUp : faArrowDown}
                                 color={color}
-                            />
+                              />
+                              : (<span style={{color: color}}> no change &nbsp;</span>)
+                            }
                             <span style={{color: color}}>{meta.days} day{meta.days > 1? 's': ''}</span>
                         </div>
                         <div>

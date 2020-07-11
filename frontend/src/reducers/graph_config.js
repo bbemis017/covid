@@ -6,7 +6,10 @@ const INITIAL_STATE ={
     current_field: 'New Cases',
     selected_states: {'USA Total': '#FF0000'},
     state_filter: '',
-    filtered_states: []
+    filtered_states: [],
+    end_date: new Date(), // Sets end_date to current date
+    start_date: get_date_offset(new Date(), -90), // sets start_date to 90 days in the past
+    average: 1 // rolling average
 };
 
 function get_selected_states(query_params, init_state) {
@@ -25,6 +28,28 @@ function get_selected_states(query_params, init_state) {
         return _.clone(init_state.selected_states);
     }
     return state_map;
+}
+
+function get_js_date(date_str) {
+    /**Converts date string YYYYMMDD to javascript date */
+    let year = date_str.substring(0,4);
+    let month = date_str.substring(4,6);
+    let day = date_str.substring(6,8);
+    return new Date(year, month - 1, day);
+}
+
+function convert_date_to_str(date) {
+    /**Converts Javascript Date to str format YYYMMDD */
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, 0);
+    let day = date.getDate().toString().padStart(2, 0);
+    return `${year}${month}${day}`
+}
+
+function get_date_offset(date, num_days) {
+    /**Calculates new Javascript Date +/- days provided */
+    date.setDate(date.getDate() + num_days);
+    return date;
 }
 
 export default function(state = INITIAL_STATE, action) {
@@ -74,10 +99,30 @@ export default function(state = INITIAL_STATE, action) {
         }
     case 'SET_CONFIG':
         let query_params = queryString.parse(action.query_str);
+        let start = _.get(query_params, 'start', convert_date_to_str(state.start_date));
+        let end =  _.get(query_params, 'end', convert_date_to_str(state.end_date));
         return {
             ...state,
             current_field: _.get(query_params, 'field', 'New Cases'),
-            selected_states: get_selected_states(query_params)
+            selected_states: get_selected_states(query_params),
+            start_date: get_js_date(start),
+            end_date: get_js_date(end),
+            average: _.get(query_params, 'average', state.average)
+        }
+    case 'SET_START':
+        return {
+            ...state,
+            start_date: action.start
+        }
+    case 'SET_END':
+        return {
+            ...state,
+            end_date: action.end
+        }
+    case 'SET_AVERAGE':
+        return {
+            ...state,
+            average: action.average
         }
     default:
       return state;
