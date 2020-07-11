@@ -27,6 +27,8 @@ class ChartConfig extends React.Component {
       query_str += '&start=' + this.convert_date_to_str(this.props.start_date)
       query_str += '&end=' + this.convert_date_to_str(this.props.end_date);
 
+      query_str += '&average=' + this.props.average;
+
       return query_str;
   }
 
@@ -98,6 +100,13 @@ class ChartConfig extends React.Component {
             </div>
           </div>
           <hr />
+          <span>Days to Average over</span>
+          <input
+            className="form-control"
+            value={this.props.average}
+            onChange={e => {this.props.dispatch({type: 'SET_AVERAGE', average: e.target.value});}}
+          ></input>
+          <hr />
           <StatePicker></StatePicker>
           <hr/>
           <button
@@ -117,7 +126,8 @@ function mapStateToProps(state) {
     selected_field: state.current_field,
     selected_states: state.selected_states,
     start_date: state.start_date,
-    end_date: state.end_date
+    end_date: state.end_date,
+    average: state.average
   };
 }
 

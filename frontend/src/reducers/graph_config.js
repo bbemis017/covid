@@ -9,7 +9,7 @@ const INITIAL_STATE ={
     filtered_states: [],
     end_date: new Date(), // Sets end_date to current date
     start_date: get_date_offset(new Date(), -90), // sets start_date to 90 days in the past
-    average: 7 // rolling average
+    average: 1 // rolling average
 };
 
 function get_selected_states(query_params, init_state) {
