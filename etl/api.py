@@ -20,19 +20,24 @@ class BaseAPI:
         self.auth_header = {'Authorization': 'KEY {}'.format(api_key)}
 
     def start_job(self, template_id):
-        url = '{uri}/job/{template}'.format(
+        url = '{uri}/api/job/{template}'.format(
             uri=self.uri,
             template=template_id
         )
 
-        req = requests.post(url=url, headers=self.auth_header, data={})
+        req = requests.post(url=url,
+                            headers=self.auth_header,
+                            data={
+                                'cache_on': False
+                            }
+        )
         if req.status_code == 202 and 'id' in req.json():
             return req.json()['id']
         else:
             raise BaseAPI.APIError(req.text)
     
     def get_job_status(self, job_id):
-        url = '{uri}/job/{job_id}/status'.format(
+        url = '{uri}/api/job/{job_id}/status'.format(
             uri=self.uri,
             job_id=job_id
         )
