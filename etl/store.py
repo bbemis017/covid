@@ -45,6 +45,7 @@ class DataStore:
         Returns: transformed dataframe'''
         df[col_name] = df[col_name].str.replace(',', '')
         df[col_name] = df[col_name].str.replace('+', '')
+        df[col_name] = df[col_name].str.replace('N/A', '')
         df[col_name] = pd.to_numeric(df[col_name]).fillna(0).astype(int)
         return df[col_name]
 
